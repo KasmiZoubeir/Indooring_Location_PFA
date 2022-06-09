@@ -38,9 +38,15 @@ function App() {
     vAxis: { title: 'Vitesse', minValue: 0, maxValue: 1.5},
     legend: 'none',
   }
+  const [csvFile,setcsvFile] = useState();
+  const [csvArray,setcsvArray] = useState([]);
+  const [ddd,setTest] = useState([]);
+  const [VVVV,setVitesse] = useState([]);
+  
  
 const labelsF=[];
 const dataF=[];
+const VCalculer=[];
 const ddistance=0;
 const vvitess=0;
 const ttemps = 0;
@@ -48,19 +54,21 @@ const ttemps = 0;
 
 labels:labelsF,
 datasets:[{
-data:dataF
+data:VVVV,
+
+borderColor: 'rgb(0, 0, 0)',
+
+
 }]
 };
 
 
 
 
+
   
   
-  const [csvFile,setcsvFile] = useState();
-  const [csvArray,setcsvArray] = useState([]);
-  const [ddd,setTest] = useState([]);
-  const [VVVV,setVitesse] = useState([]);
+
   
   
   var heading = ['Vitesse'];
@@ -70,7 +78,7 @@ data:dataF
   const possYY=[];
   const dist=[];
 
-  const VCalculer=[];
+  
  
   const processCSV=(str,delim=',')=>{
     const  headers = str.slice(0,str.indexOf('\n')).split(delim);
@@ -113,6 +121,7 @@ setcsvArray(newArray);
   const submitConole = () =>{
     for (var i = 0; i < possXX.length; i++) {
       const arrayVitess=[];
+      const result=0;
       VCalculer.push(Math.sqrt((possXX[i+1]-possXX[i])*(possXX[i+1]-possXX[i])+(possYY[i+1]-possYY[i])*(possYY[i+1]-possYY[i]))*1000/(dist[i+1]-dist[i]))
     // DX.push(possXX[i+1]-possXX[i]);
     arrayVitess.push(Number(dist[i]),Number(Math.sqrt((possXX[i+1]-possXX[i])*(possXX[i+1]-possXX[i])+(possYY[i+1]-possYY[i])*(possYY[i+1]-possYY[i]))*1000/(dist[i+1]-dist[i])))
@@ -122,8 +131,11 @@ setcsvArray(newArray);
     console.log(VCalculer);
     console.log(scatterDataVitess);
     setTest(scatterDataVitess);
+    // for (var i = 0; i < possXX.length; i++) {
+    //   result = VVVV[i] + result;
+    // }
+
    
-    
     // possXX.map((val,i) =>{
       
     //   console.log(val,1);
@@ -174,7 +186,7 @@ setcsvArray(newArray);
               // console.log('X :' + item.PosX );
               // console.log('Y :' + item.PosY);
               
-              //labelsF.push(parseInt(item.PosX*100));
+              //labelsFpush(parseInt(item.PosX*100));
               //dataF.push(parseInt(item.PosZ*100));
               arrayyy.push(Number(item.PosX),Number(item.PosZ));
 <h1>{item.Vitesse}</h1>
@@ -220,7 +232,7 @@ setcsvArray(newArray);
         />  
         
         <div id='here'>
-        <Chart
+        {/* <Chart
         width={'1000px'}
         height={'600px'}
         chartType="ScatterChart"
@@ -228,7 +240,14 @@ setcsvArray(newArray);
         data={ddd}
         options={scatterVitess}
         rootProps={{ 'data-testid': '1' }}
-      />
+      /> */}
+      <Line data={data}
+    
+
+     
+       
+      
+    />
           </div>
        
       
@@ -258,6 +277,7 @@ setcsvArray(newArray);
              possXX.push(Number(item.PosX));
              dist.push(Number(item.Timestamp));
              possYY.push(Number(item.PosZ));
+             labelsF.push(item.Timestamp);
             
             
              
@@ -307,15 +327,17 @@ setcsvArray(newArray);
                 <tbody>
                
                 {VVVV.map(val1 =>
+
+                
                 <th>
                   <td><p>  V={val1}</p></td>
                   </th>
-             
+                
               )}
             
                 </tbody>
             </table>
-            <h1>Vitesse Moyenne</h1>
+            <h1>Vitesse Moyenne </h1>
           
        
     </div>
