@@ -1,0 +1,158 @@
+import logo from './logo.svg';
+import './App.css';
+import {csv} from 'd3';
+import { useEffect, useState } from 'react';
+import {Line, Doughnut,Scatter} from 'react-chartjs-2';
+import 'chart.js/auto';
+import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
+import React, { Component } from 'react'
+import Chart from 'react-google-charts'
+
+
+function App() {
+  const scatterData = [
+    ['Age', 'Weight']
+  ];
+  const scatterOptions = {
+    title: 'Age vs. Weight comparison',
+    hAxis: { title: 'Age', minValue: 0, maxValue: 15 },
+    vAxis: { title: 'Weight', minValue: 0, maxValue: 15 },
+    legend: 'none',
+  }
+  const scatterDataGGGG = [
+    ['Age', 'Weight'],
+    [8, 12],
+    [4, 5.5],
+    [11, 14],
+    [4, 5],
+    [3, 3.5],
+    [6.5, 7],
+  ]
+const labelsF=[];
+const dataF=[];
+
+  const data={
+
+labels:labelsF,
+datasets:[{
+data:dataF
+}]
+};
+
+
+
+
+  
+  
+  const [csvFile,setcsvFile] = useState();
+  const [csvArray,setcsvArray] = useState([]);
+  const processCSV=(str,delim=',')=>{
+    const  headers = str.slice(0,str.indexOf('\n')).split(delim);
+    const rows = str.slice(str.indexOf('\n')+1).split('\n');
+    
+    
+    const newArray = rows.map(row=>{
+      const value = row.split(delim);
+      const eachObject  = headers.reduce((obj,header,i) =>{
+        obj[header]=value[i+1];
+       
+        return obj;
+      },{}) 
+      
+      return eachObject;
+    })
+setcsvArray(newArray);
+
+  }
+  
+  const submit = () =>{
+    const file =csvFile;
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      const text =e.target.result;
+      
+      processCSV(text);
+    }
+    reader.readAsText(file);
+    
+  }
+  const submitConole = () =>{
+    
+    console.log(scatterDataGGGG)
+    console.log(scatterData);
+  }
+
+ 
+  return (
+    <div >
+     <form id='csv-form'>
+       <input type='file'
+        accept='.csv'
+        id='csvFile'
+        onChange={(e)=>{
+          setcsvFile(e.target.files[0])
+        }}
+       ></input>
+       <button onClick={(e)=>{
+         e.preventDefault()
+         if(csvFile)submit()
+       }}>submit</button>
+       <button onClick={(e)=>{
+        e.preventDefault()
+        if(csvFile)submitConole()
+      }}>submitConsol</button>
+       {csvArray.length>0 ? <>
+   
+       
+       <table>
+       
+         <tbody>
+           {
+             csvArray.map((item,i)=>{
+              //const arrayyy=[];
+              // console.log('X :' + item.PosX );
+              // console.log('Y :' + item.PosY);
+              
+              labelsF.push(parseInt(item.PosX*100));
+              dataF.push(parseInt(item.PosZ*100));
+              //arrayyy.push(parseInt(item.PosX),parseInt(item.PosZ));
+
+             
+            // scatterData.push(arrayyy);
+             
+             
+             })
+            
+
+           }
+         </tbody>
+       </table>
+       
+       </> : 'null'}
+     </form>
+     -------------------------------
+    
+ <Line data={data}
+    
+
+     
+       
+      
+       />
+  
+       
+        {/* <Chart
+          width={'700px'}
+          height={'420px'}
+          chartType="ScatterChart"
+          loader={<div>Loading Chart</div>}
+          data={scatterData}
+          options={scatterOptions}
+          rootProps={{ 'data-testid': '1' }}
+        /> */}
+       
+    </div>
+  );
+}
+
+export default App;
